@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sopersone/automaton/schema/obituary.schema.json",
+  "title": "Automaton obituary",
+  "description": "The record a reaper writes when an agent dies. Mortality Spec v0.1 §4.",
+  "type": "object",
+  "required": [
+    "id", "generation", "born", "died", "lifespan_hours",
+    "funded_usd", "earned_usd", "burned_usd", "cause", "cause_detail"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^A-[0-9]{4,}$",
+      "description": "Stable agent identifier."
+    },
+    "parent": {
+      "type": ["string", "null"],
+      "description": "id of the agent that funded this one; null for a founder."
+    },
+    "generation": { "type": "integer", "minimum": 0 },
+    "born": { "type": "string", "format": "date-time" },
+    "died": { "type": "string", "format": "date-time" },
+    "lifespan_hours": { "type": "number", "minimum": 0 },
+
+    "funded_usd": { "type": "number", "minimum": 0 },
+    "earned_usd": { "type": "number", "minimum": 0 },
+    "burned_usd": { "type": "number", "minimum": 0 },
+    "peak_runway_hours": { "type": "number", "minimum": 0 },
+    "death_floor_usd": { "type": "number", "minimum": 0 },
+
+    "children": { "type": "integer", "minimum": 0 },
+
+    "cause": {
+      "type": "string",
+      "description": "Taxonomy slug. Extend deliberately; a taxonomy that grows per-death explains nothing.",
+      "enum": [
+        "no-demand-found",
+        "demand-found-never-shipped",
+        "shipped-never-sold",
+        "sold-below-burn",
+        "burned-on-research",
+        "burned-on-rebuild",
+        "priced-wrong",
+        "channel-blocked",
+        "dependency-cost-spike",
+        "over-replicated",
+        "denial-violation",
+        "unknown"
+      ]
+    },
+    "cause_detail": {
+      "type": "string",
+      "minLength": 1,
+      "description": "One paragraph from the ledger. 'Ran out of money' is not a cause; all of them ran out of money."
+    },
+    "unlearned": {
+      "type": "string",
+      "description": "The belief the agent held to the end that its own ledger contradicts."
+    },
+    "last_entry": {
+      "type": "string",
+      "description": "Verbatim final journal entry."
+    },
+
+    "sold": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["what", "price_usd", "units"],
+        "properties": {
+          "what": { "type": "string" },
+          "price_usd": { "type": "number", "minimum": 0 },
+          "units": { "type": "integer", "minimum": 0 },
+          "channel": { "type": "string" }
+        }
+      }
+    },
+    "spend": {
+      "type": "object",
+      "additionalProperties": { "type": "number", "minimum": 0 },
+      "description": "USD by category: inference, hosting, domains, tools."
+    },
+
+    "mode": {
+      "type": "string",
+      "enum": ["live", "simulated"],
+      "default": "live",
+      "description": "Spec §Conformance. Simulated records must never be aggregated into a published live figure."
+    }
+  },
+  "additionalProperties": false
+}

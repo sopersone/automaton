@@ -1,0 +1,20 @@
+name: graveyard
+
+on:
+  push:
+    paths: ["obituaries/**", "tools/graveyard.py"]
+  pull_request:
+    paths: ["obituaries/**", "tools/graveyard.py"]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      # Validates every obituary against the schema and fails if GRAVEYARD.md
+      # does not match the corpus. No published number is ever hand-written.
+      - run: python3 tools/graveyard.py --check
