@@ -89,5 +89,5 @@ schema/              machine-readable obituary format
 
 ## Writeups
 
-- [I Built an AI That Dies If It Stops Making Money](#) — the architecture
+- [I Built an AI That Dies If It Stops Making Money](https://x.com/sopersone/status/2095105287061721111) — the architecture
 - Logs and financial data — *next*
